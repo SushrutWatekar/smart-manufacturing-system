@@ -1,8 +1,32 @@
+# Environment files
 .env
-node_modules/
+.env.*
+
+# Java / Spring Boot
 target/
-build/
+*.jar
+*.war
+
+# Node (if frontend exists)
+node_modules/
+
+# Logs
 *.log
-.DS_Store
+
+# IDE files
 .idea/
 .vscode/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+*.pid
+
+# Build
+build/
+
+# Misc
+*.tmp
