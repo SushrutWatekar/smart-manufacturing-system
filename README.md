@@ -1,3 +1,8 @@
+![Java](https://img.shields.io/badge/Java-17-blue)
+![Spring Boot](https://img.shields.io/badge/SpringBoot-Backend-green)
+![Docker](https://img.shields.io/badge/Docker-Containerized-blue)
+![RabbitMQ](https://img.shields.io/badge/RabbitMQ-Event--Driven-orange)
+
 # Smart Manufacturing Management System
 
 ## Overview
