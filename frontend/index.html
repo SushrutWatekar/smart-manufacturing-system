@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h1>Order Management System</h1>
+
+<!-- Create Order Form -->
+<div class="form-container">
+    <h2>Place an Order</h2>
+    <form id="create-order-form">
+        <label for="order-client-id">Client ID:</label>
+        <input type="number" id="order-client-id" required>
+        <label for="order-product-id">Product ID:</label>
+        <input type="number" id="order-product-id" required>
+        <label for="order-quantity">Quantity:</label>
+        <input type="number" id="order-quantity" required>
+        <button type="submit">Create Order</button>
+    </form>
+</div>
+
+<!-- Search Orders Form -->
+<div class="form-container">
+    <h2>Search Orders</h2>
+    <form id="search-order-form">
+        <label for="search-client-id">Client ID:</label>
+        <input type="number" id="search-client-id" required>
+        <button type="submit">Search Orders</button>
+    </form>
+</div>
+
+<!-- Display Results -->
+<div class="result-container">
+    <h2>Results</h2>
+    <pre id="results"></pre>
+</div>
+
+<script src="scripts.js"></script>
+</body>
+</html>

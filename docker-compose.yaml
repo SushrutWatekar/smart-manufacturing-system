@@ -1,0 +1,188 @@
+services:
+  database:
+    container_name: database
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - backend
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+
+  queue:
+    container_name: queue
+    build:
+      context: ./queue
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    networks:
+      - backend
+    ports:
+      - "8004:8004"
+    env_file:
+      - .env
+    environment:
+      - FLASK_APP=main.py
+      - FLASK_RUN_PORT=8004
+      - FLASK_ENV=development
+    volumes:
+      - ./queue:/app
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    depends_on:
+      - database
+    networks:
+      - backend
+    ports:
+      - "8091:8080"
+
+  inventorymanagement:
+    container_name: inventorymanagement
+    build:
+      context: ./inventory-management
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    networks:
+      - backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - FLASK_APP=main.py
+      - FLASK_RUN_PORT=8000
+      - FLASK_ENV=development
+    volumes:
+      - ./inventory-management:/app
+
+  ordermanagement:
+    container_name: ordermanagement
+    build:
+      context: ./order-management
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+      - inventorymanagement
+    networks:
+      - backend
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+    environment:
+      - FLASK_APP=main.py
+      - FLASK_RUN_PORT=8001
+      - FLASK_ENV=development
+    volumes:
+      - ./order-management:/app
+
+  ordertracking:
+    container_name: ordertracking
+    build:
+      context: ./order-tracking
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    networks:
+      - backend
+    ports:
+      - "8003:8003"
+    env_file:
+      - .env
+    environment:
+      - FLASK_APP=main.py
+      - FLASK_RUN_PORT=8003
+      - FLASK_ENV=development
+    volumes:
+      - ./order-tracking:/app
+
+  productionscheduling:
+    container_name: productionscheduling
+    build:
+      context: ./production-scheduling
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    networks:
+      - backend
+    ports:
+      - "8002:8002"
+    env_file:
+      - .env
+    environment:
+      - FLASK_APP=main.py
+      - FLASK_RUN_PORT=8002
+      - FLASK_ENV=development
+    volumes:
+      - ./production-scheduling:/app
+
+  rabbitmq:
+    image: "rabbitmq:3.13-rc-management"
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - backend
+    env_file:
+      - .env
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  client:
+    container_name: client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+      - rabbitmq
+      - productionscheduling
+      - ordermanagement
+      - inventorymanagement
+      - ordertracking
+    networks:
+      - backend
+      - frontend
+    ports:
+      - "8010:8010"
+    env_file:
+      - .env
+    environment:
+      - FLASK_APP=main.py
+      - FLASK_RUN_PORT=8010
+      - FLASK_ENV=development
+    volumes:
+      - ./client:/app
+  frontend:
+    image: nginx:latest
+    container_name: frontend
+    ports:
+      - "5000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      - client
+      - inventorymanagement
+      - ordermanagement
+      - ordertracking
+      - rabbitmq
+      - productionscheduling
+      - queue
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+volumes:
+  db-data:
