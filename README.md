@@ -5,6 +5,9 @@
 
 # Smart Manufacturing Management System
 
+## Architecture Diagram
+![Architecture](architecture.png)
+
 ## Overview
 A distributed microservices-based backend system designed to manage manufacturing operations, including order processing, inventory tracking, production scheduling, and real-time status updates.
 
@@ -41,6 +44,4 @@ The system consists of the following microservices:
 
 ---
 
-## Architecture Diagram
-![Architecture](architecture.png)
 
