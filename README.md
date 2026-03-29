@@ -39,7 +39,3 @@ The system consists of the following microservices:
 ## Architecture Diagram
 ![Architecture](architecture.png)
 
----
-git clone https://github.com/YOUR-USERNAME/smart-manufacturing-system.git
-cd smart-manufacturing-system
-docker-compose up --build
